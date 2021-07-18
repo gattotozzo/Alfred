@@ -4,5 +4,5 @@
 
 # Alfred voice assistant
 
-This is our super cool voice assistant called Alfred, he's able to do a lot of things so you should try it!.
+This is our super cool voice assistant called Alfred, he's able to do a lot of things so you should try it!\
 **--Work in progress--**
