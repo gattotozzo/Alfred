@@ -3,3 +3,4 @@ commit.bat
 *.pyc
 *.pyo
 __pycache__/
+speak.mp3
