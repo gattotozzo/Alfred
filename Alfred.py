@@ -13,7 +13,7 @@ r = sr.Recognizer()
 searchElement = ""
 recognised_text = ""
 
-while(recognised_text != "Alfred"): 
+while("alfred" not in recognised_text.lower()): 
 
     with sr.Microphone() as source:
         text = r.listen(source)
@@ -44,8 +44,8 @@ except sr.UnknownValueError:
 except sr.RequestError as e:
     print("error")
 
-if (recognised_text.find("Google") != -1):
-    if (recognised_text.find("cerca") != -1):
+if ("Google" in recognised_text.lower()):
+    if ("cerca" in recognised_text.lower()):
         i = recognised_text.find("cerca")+6
         
         for x in range (i, len(recognised_text)):
@@ -60,14 +60,14 @@ if (recognised_text.find("Google") != -1):
         with sr.Microphone() as source: 
             text = r.listen(source)
             try:
-                recognised_text = r.recognize_google(text, language="it-IT")
+                recognised_text = r.recognize_google(text, language="it-IT").lower()
             except sr.UnknownValueError:
                 engine.say("i didn't understand sorry")
                 engine.runAndWait()
             except sr.RequestError as e:
                 engine.say("i didn't understand sorry")
                 engine.runAndWait()
-            if (recognised_text.find("no") != -1 or recognised_text.find("No") != -1):
+            if ("no" in recognised_text):
                 url = "https://www.google.com"
                 engine.say("ok, no problem. opening a new page")
                 engine.runAndWait()
@@ -78,5 +78,5 @@ if (recognised_text.find("Google") != -1):
         
     webbrowser.open_new_tab(url)
 
-elif (recognised_text.find("spotify") != -1 or recognised_text.find("Spotify") != -1):
+elif ("spotify" in recognised_text):
     os.startfile("spotify:")
