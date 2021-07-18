@@ -2,6 +2,7 @@ import speech_recognition as sr
 import pyttsx3
 import webbrowser
 import subprocess
+import os
 
 engine = pyttsx3.init()
 voices = engine.getProperty('voices')
@@ -78,4 +79,4 @@ if (recognised_text.find("Google") != -1):
     webbrowser.open_new_tab(url)
 
 elif (recognised_text.find("spotify") != -1 or recognised_text.find("Spotify") != -1):
-    subprocess.call(r"C:\Users\danie\AppData\Roaming\Spotify\Spotify.exe")
+    os.startfile("spotify:")
