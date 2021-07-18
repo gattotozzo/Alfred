@@ -1,82 +1,55 @@
-import speech_recognition as sr
-import pyttsx3
 import webbrowser
 import subprocess
 import os
+from AlfredTTS import AlfredVoice 
+from SpeechRecognition import CommandListener
 
-engine = pyttsx3.init()
-voices = engine.getProperty('voices')
-engine.setProperty('voice', voices[2].id)
-engine.setProperty("rate", 178)
+def main():
 
-r = sr.Recognizer()
-searchElement = ""
-recognised_text = ""
+    searchElement = ""
+    recognised_text = ""
 
-while("alfred" not in recognised_text.lower()): 
+    alfredVoice = AlfredVoice()
+    commandListener = CommandListener("it-IT")
 
-    with sr.Microphone() as source:
-        text = r.listen(source)
-
-        try:
-            recognised_text = r.recognize_google(text, language="it-IT")
-        except sr.UnknownValueError:
-            print("error")
-        except sr.RequestError as e:
-            print("error")
-
-    print(recognised_text)
-    
-
-with sr.Microphone() as source: 
-    text = r.listen(source)
-    try:
-        recognised_text = r.recognize_google(text, language="it-IT")
-    except sr.UnknownValueError:
-        print("error")
-    except sr.RequestError as e:
-        print("error")
-
-try:
-    recognised_text = r.recognize_google(text, language="it-IT")
-except sr.UnknownValueError:
-    print("error")
-except sr.RequestError as e:
-    print("error")
-
-if ("Google" in recognised_text.lower()):
-    if ("cerca" in recognised_text.lower()):
-        i = recognised_text.find("cerca")+6
-        
-        for x in range (i, len(recognised_text)):
-            searchElement += recognised_text[x]
-        url = "https://www.google.com.tr/search?q=" + searchElement
-        engine.say("subito, cerco " + searchElement + " su google!")
-        engine.runAndWait()
-    else:
-        engine.say("no problem sir, you want something in particular?")
-        engine.runAndWait()
-        
-        with sr.Microphone() as source: 
-            text = r.listen(source)
+    while True:
+        while True: 
             try:
-                recognised_text = r.recognize_google(text, language="it-IT").lower()
-            except sr.UnknownValueError:
-                engine.say("i didn't understand sorry")
-                engine.runAndWait()
-            except sr.RequestError as e:
-                engine.say("i didn't understand sorry")
-                engine.runAndWait()
-            if ("no" in recognised_text):
-                url = "https://www.google.com"
-                engine.say("ok, no problem. opening a new page")
-                engine.runAndWait()
-            else:
-                url = "https://www.google.com.tr/search?q=" + recognised_text
-                engine.say("perfect!")
-                engine.runAndWait()
-        
-    webbrowser.open_new_tab(url)
+                recognised_text = commandListener.get_command()
+                print(recognised_text)
+                if ("alfred" in recognised_text or "alfredo" in recognised_text):
+                    break
+            except Exception as e:
+                print(e)
+        print("WAKEWORD")
 
-elif ("spotify" in recognised_text):
-    os.startfile("spotify:")
+        if ("google" in recognised_text):
+            if ("cerca" in recognised_text):
+                i = recognised_text.find("cerca")+6
+                for x in range (i, len(recognised_text)):
+                    searchElement += recognised_text[x]
+                url = "https://www.google.com.tr/search?q={}".format(searchElement)
+                alfredVoice.speak("subito, cerco {} su google!".format(searchElement))
+            else:
+                alfredVoice.speak("nessun problema, vuoi cercare qualcosa in particolare?")
+                try:
+                    recognised_text = commandListener.get_command()
+                except commandListener.UnknownValueError:
+                    alfredVoice.speak("Scusa, non ho capito")
+                except commandListener.RequestError as e:
+                    alfredVoice.speak("Scusa, non ho capito")
+                if ("no" in recognised_text):
+                    url = "https://www.google.com"
+                    alfredVoice.speak("ok, nessun problema")
+                else:
+                    url = "https://www.google.com.tr/search?q={}".format(recognised_text)
+                    alfredVoice.speak("perfect!")
+            webbrowser.open_new_tab(url)
+        elif ("apri" in recognised_text):
+            os.startfile("{}:".format(recognised_text.split("apri")[1].split()[0].replace(" ", "")))
+        else:
+            alfredVoice.speak("Scusa, non ho capito")
+        recognised_text = ""
+
+if __name__ == "__main__":
+    main()
