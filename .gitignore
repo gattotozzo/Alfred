@@ -4,3 +4,4 @@ commit.bat
 *.pyo
 __pycache__/
 speak.mp3
+dist

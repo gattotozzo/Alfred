@@ -1,10 +1,10 @@
 import webbrowser
-import subprocess
 import os
 from SpeechRecognition import CommandListener
 import gtts
 from playsound import playsound
 import tempfile
+from Window import AssistantWindow
 
 def speak(phrase):
     tts = gtts.gTTS(phrase, lang="it")
@@ -59,4 +59,5 @@ def main():
         recognised_text = ""
 
 if __name__ == "__main__":
-    main()
+    window = AssistantWindow()
+    window.startWindow(main)
